@@ -1,0 +1,68 @@
+# Builds and publishes a new edition every morning, then deploys the site to GitHub Pages.
+# Setup: see SETUP_GUIDE.md. You can also run it any time from the Actions tab ("Run workflow").
+name: Daily edition
+
+on:
+  schedule:
+    - cron: "30 0 * * *"   # 00:30 UTC = 06:00 IST. GitHub can start scheduled runs a few minutes late.
+  workflow_dispatch:        # adds a "Run workflow" button in the Actions tab
+  push:
+    branches: [main]        # redeploy (without new news) when you edit files
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect headlines and write today's edition
+        if: github.event_name != 'push'
+        env:
+          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+          CHECKER_PROVIDER: ${{ vars.CHECKER_PROVIDER }}
+          CHECKER_MODEL: ${{ vars.CHECKER_MODEL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+        run: |
+          python3 scripts/ingest_rss.py --feeds scripts/feeds.json
+          python3 scripts/summarise.py --publish
+
+      - name: Check data and rebuild the edition list
+        run: |
+          python3 scripts/validate.py
+          python3 scripts/build_manifest.py
+
+      - name: Save the edition to the repository (keeps the archive)
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "daily-brief-bot"
+          git config user.email "daily-brief-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Edition $(TZ=Asia/Kolkata date +%F)"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4
