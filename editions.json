@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "editions": [
+    {
+      "date": "2026-10-12",
+      "edition_number": 48,
+      "published_at": "2026-10-12T06:00:00+05:30",
+      "status": "scheduled",
+      "is_demo": true,
+      "lead_headline": "Scheduled demo story: this edition is hidden until its publish time",
+      "article_count": 1,
+      "verification_counts": {
+        "demo": 1
+      },
+      "path": "editions/2026-10-12.json"
+    },
+    {
+      "date": "2026-10-11",
+      "edition_number": 47,
+      "published_at": "2026-10-11T01:00:00+05:30",
+      "status": "published",
+      "is_demo": true,
+      "lead_headline": "Kestrel Industries agrees to buy Coromandel Logistics in ₹18,500 crore cash-and-stock deal",
+      "article_count": 22,
+      "verification_counts": {
+        "demo": 21,
+        "evergreen": 1
+      },
+      "path": "editions/2026-10-11.json"
+    },
+    {
+      "date": "2026-10-10",
+      "edition_number": 46,
+      "published_at": "2026-10-10T06:00:00+05:30",
+      "status": "published",
+      "is_demo": true,
+      "lead_headline": "Halcyon Small Finance Bank's IPO is subscribed 46 times on the final day",
+      "article_count": 6,
+      "verification_counts": {
+        "demo": 5,
+        "evergreen": 1
+      },
+      "path": "editions/2026-10-10.json"
+    },
+    {
+      "date": "2026-10-09",
+      "edition_number": 45,
+      "published_at": "2026-10-09T06:00:00+05:30",
+      "status": "published",
+      "is_demo": true,
+      "lead_headline": "Saffron Motors posts record quarterly deliveries on SUV demand",
+      "article_count": 3,
+      "verification_counts": {
+        "demo": 3
+      },
+      "path": "editions/2026-10-09.json"
+    }
+  ]
+}

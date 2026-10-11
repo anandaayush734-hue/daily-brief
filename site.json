@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "title": "The Daily Brief",
+  "tagline": "Markets, deals, policy and the ideas that move capital",
+  "volume": "Vol. I",
+  "timezone": "Asia/Kolkata",
+  "timezone_label": "IST",
+  "locale": "en-IN",
+  "sections": [
+    { "slug": "india",       "name": "India Business & Economy",          "short": "India",       "description": "The economy, RBI, SEBI, interest rates and government policy." },
+    { "slug": "markets",     "name": "Global Markets",                     "short": "Markets",     "description": "Equities, bonds, currencies and commodities, in India and abroad." },
+    { "slug": "deals",       "name": "Investment Banking & Deals",         "short": "Deals",       "description": "M&A, IPOs, private capital and capital-markets activity." },
+    { "slug": "corporate",   "name": "Corporate Strategy & Earnings",      "short": "Companies",   "description": "Results, business models, valuations and strategy." },
+    { "slug": "geopolitics", "name": "Geopolitics & International Trade",  "short": "Trade",       "description": "Tariffs, trade agreements, supply chains and global economics." },
+    { "slug": "tech",        "name": "Technology & AI",                    "short": "Tech & AI",   "description": "Artificial intelligence, technology and what they mean for business." },
+    { "slug": "climate",     "name": "Climate Finance",                    "short": "Climate",     "description": "Green bonds, transition finance and sustainable business." },
+    { "slug": "analysis",    "name": "The Analyst's Corner",               "short": "Analysis",    "description": "Deeper analysis of the day's most important developments." },
+    { "slug": "learn",       "name": "Learn Something New",                "short": "Learn",       "description": "A finance concept or business case study, explained." }
+  ],
+  "homepage": [
+    { "type": "front",     "title": "Today's Front Page", "count": 5 },
+    { "type": "section",   "slug": "india" },
+    { "type": "section",   "slug": "markets" },
+    { "type": "section",   "slug": "deals" },
+    { "type": "section",   "slug": "corporate" },
+    { "type": "section",   "slug": "geopolitics" },
+    { "type": "section",   "slug": "tech" },
+    { "type": "section",   "slug": "climate" },
+    { "type": "analysis",  "slug": "analysis" },
+    { "type": "learn",     "slug": "learn" },
+    { "type": "watchlist", "title": "Tomorrow's Watchlist" }
+  ],
+  "verification_statuses": {
+    "demo":          { "label": "Demo",          "description": "Fictional demonstration content. Not real news." },
+    "unverified":    { "label": "Unverified",    "description": "Ingested automatically; not yet checked against the source." },
+    "source-linked": { "label": "Source-linked", "description": "Summary checked against the linked original source." },
+    "verified":      { "label": "Verified",      "description": "Checked by an editor against primary sources." },
+    "corrected":     { "label": "Corrected",     "description": "Updated after publication. See the correction note." },
+    "evergreen":     { "label": "Explainer",     "description": "Educational content that does not report news." }
+  }
+}
