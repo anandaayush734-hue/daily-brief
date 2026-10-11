@@ -1,0 +1,82 @@
+[
+  {
+    "id": "rbi-press",
+    "name": "Reserve Bank of India",
+    "url": "https://www.rbi.org.in/pressreleases_rss.xml",
+    "section": "india",
+    "category": "RBI",
+    "max_items": 5
+  },
+  {
+    "id": "sebi",
+    "name": "SEBI",
+    "url": "https://www.sebi.gov.in/sebirss.xml",
+    "section": "india",
+    "category": "SEBI",
+    "max_items": 5
+  },
+  {
+    "id": "gn-india-economy",
+    "name": "Google News: Indian economy",
+    "url": "https://news.google.com/rss/search?q=India+economy+OR+RBI+OR+inflation+OR+GDP+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "india",
+    "category": "Economy",
+    "max_items": 8
+  },
+  {
+    "id": "gn-indian-markets",
+    "name": "Google News: Indian markets",
+    "url": "https://news.google.com/rss/search?q=Sensex+OR+Nifty+OR+rupee+OR+bond+yields+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "markets",
+    "category": "Markets",
+    "max_items": 8
+  },
+  {
+    "id": "gn-global-markets",
+    "name": "Google News: global markets",
+    "url": "https://news.google.com/rss/search?q=global+stocks+OR+Treasury+yields+OR+Federal+Reserve+OR+oil+prices+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "markets",
+    "category": "Global markets",
+    "max_items": 8
+  },
+  {
+    "id": "gn-deals",
+    "name": "Google News: deals",
+    "url": "https://news.google.com/rss/search?q=India+IPO+OR+acquisition+OR+merger+OR+%22stake+sale%22+OR+%22private+equity%22+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "deals",
+    "category": "Deals",
+    "max_items": 10
+  },
+  {
+    "id": "gn-earnings",
+    "name": "Google News: earnings",
+    "url": "https://news.google.com/rss/search?q=quarterly+results+net+profit+India+company+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "corporate",
+    "category": "Earnings",
+    "max_items": 8
+  },
+  {
+    "id": "gn-trade",
+    "name": "Google News: trade",
+    "url": "https://news.google.com/rss/search?q=tariffs+OR+%22trade+deal%22+OR+exports+India+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "geopolitics",
+    "category": "Trade",
+    "max_items": 8
+  },
+  {
+    "id": "gn-ai",
+    "name": "Google News: AI business",
+    "url": "https://news.google.com/rss/search?q=artificial+intelligence+business+OR+investment+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "tech",
+    "category": "AI",
+    "max_items": 8
+  },
+  {
+    "id": "gn-climate",
+    "name": "Google News: climate finance",
+    "url": "https://news.google.com/rss/search?q=%22green+bond%22+OR+%22climate+finance%22+OR+%22renewable+energy%22+investment+when%3A1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "section": "climate",
+    "category": "Climate finance",
+    "max_items": 6
+  }
+]
