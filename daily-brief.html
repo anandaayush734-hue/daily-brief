@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Daily Brief</title>
+  <meta name="description" content="A personal digital newspaper on markets, deals, the Indian economy, trade, technology and climate finance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500..900;1,6..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&display=swap">
+  <style>
+/* The Daily Brief — editorial stylesheet
+   Layout concept: a 12-column broadsheet grid. Lead story spans 7 columns,
+   the remaining front-page stories stack in a ranked rail; sections below
+   run as three-column bands separated by heavy ink rules. */
+
+:root {
+  --paper: #f5f5f1;
+  --surface: #eaebe5;
+  --ink: #16191d;
+  --ink-2: #4b5058;
+  --ink-3: #6e737a;
+  --rule: #c8cac3;
+  --accent: #0e4a59;         /* petrol ink: links, kickers */
+  --accent-soft: #dbe7e8;
+  --demo: #a4501c;           /* demo / caution label */
+  --demo-soft: #f4e4d6;
+  --ok: #2c6b3f;
+  --warn: #8a6a12;
+
+  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body: "Newsreader", "Iowan Old Style", "Charter", Georgia, serif;
+  --f-label: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5rem;
+  --step-3: 2rem;
+  --step-4: clamp(2.1rem, 4.2vw, 3.1rem);
+  --step-5: clamp(2.8rem, 8vw, 5.6rem);
+
+  --gutter: clamp(16px, 3vw, 40px);
+  --maxw: 1240px;
+  --measure: 66ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121416; --surface: #1b1e21; --ink: #e9e7e2; --ink-2: #b0b3b8; --ink-3: #8c9096;
+    --rule: #30343a; --accent: #7fbccb; --accent-soft: #1d2f34; --demo: #e4a06a; --demo-soft: #3a2a1e;
+    --ok: #7cc392; --warn: #d9b45a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121416; --surface: #1b1e21; --ink: #e9e7e2; --ink-2: #b0b3b8; --ink-3: #8c9096;
+  --rule: #30343a; --accent: #7fbccb; --accent-soft: #1d2f34; --demo: #e4a06a; --demo-soft: #3a2a1e;
+  --ok: #7cc392; --warn: #d9b45a; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+img { max-width: 100%; }
+h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.label {
+  font-family: var(--f-label); font-size: var(--step--1); font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+}
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 16px; top: 16px; background: var(--paper); padding: 8px 12px; z-index: 10; }
+
+/* ---------- Masthead ---------- */
+.masthead { padding-block: 18px 0; }
+.dateline {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px;
+  border-bottom: 1px solid var(--rule); padding-bottom: 10px;
+}
+.dateline span { white-space: nowrap; }
+.nameplate { text-align: center; padding-block: clamp(14px, 3vw, 28px) clamp(10px, 2vw, 18px); }
+.nameplate a { display: inline-block; }
+.nameplate h1 {
+  font-family: var(--f-display); font-weight: 800; font-size: var(--step-5);
+  line-height: 0.95; letter-spacing: -0.015em;
+}
+.nameplate h1 em { font-style: italic; font-weight: 500; }
+.tagline { margin-top: 10px; font-style: italic; color: var(--ink-2); font-size: var(--step-0); }
+
+.navbar {
+  border-top: 3px double var(--ink); border-bottom: 1px solid var(--ink);
+  display: flex; align-items: center; gap: 12px; padding-block: 6px;
+}
+.sections-nav { display: flex; gap: 2px 18px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.sections-nav a {
+  font-family: var(--f-label); font-size: 0.9rem; font-weight: 500; padding-block: 6px; white-space: nowrap;
+}
+.sections-nav a[aria-current="page"] { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
+.search { display: flex; align-items: center; border: 1px solid var(--rule); background: var(--paper); }
+.search input {
+  border: 0; background: transparent; color: var(--ink); font: 0.95rem var(--f-label);
+  padding: 7px 10px; width: 13rem; min-width: 0;
+}
+.search input:focus { outline: none; }
+.search:focus-within { border-color: var(--accent); }
+.search button {
+  border: 0; background: var(--ink); color: var(--paper); font: 500 0.8rem var(--f-label);
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 12px; cursor: pointer;
+}
+.theme-toggle {
+  border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer;
+  font: 500 0.8rem var(--f-label); padding: 7px 9px; letter-spacing: 0.04em;
+}
+
+/* ---------- Notices & badges ---------- */
+.notice {
+  margin-top: 16px; padding: 10px 14px; background: var(--demo-soft); color: var(--ink);
+  border-left: 4px solid var(--demo); font-family: var(--f-label); font-size: 0.95rem;
+  display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;
+}
+.notice strong { color: var(--demo); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.8rem; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px; font: 600 0.68rem var(--f-label);
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 6px; border: 1px solid currentColor;
+  white-space: nowrap; line-height: 1.4;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.badge--demo { color: var(--demo); }
+.badge--unverified { color: var(--warn); }
+.badge--source-linked, .badge--evergreen { color: var(--accent); }
+.badge--verified { color: var(--ok); }
+.badge--corrected { color: var(--warn); }
+
+/* ---------- Section frames ---------- */
+main { padding-block: 8px 48px; }
+.band { margin-top: 40px; }
+.band__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-top: 4px solid var(--ink); padding-top: 8px; margin-bottom: 18px;
+}
+.band__head h2 { font-family: var(--f-display); font-weight: 700; font-size: var(--step-3); line-height: 1.1; }
+.band__head p { color: var(--ink-2); font-style: italic; font-size: 0.98rem; }
+.band__head .more { font-family: var(--f-label); font-size: 0.9rem; color: var(--accent); white-space: nowrap; }
+.band__title { display: grid; gap: 2px; min-width: 0; }
+
+/* ---------- Article card (reusable component) ---------- */
+.card { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.card__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.card__kicker { font: 600 0.78rem var(--f-label); letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
+.card__headline { font-family: var(--f-display); font-weight: 700; line-height: 1.15; font-size: var(--step-1); }
+.card__headline a:hover { color: var(--accent); }
+.card__summary { color: var(--ink-2); font-size: 0.98rem; line-height: 1.5; }
+.card__why {
+  font-size: 0.93rem; line-height: 1.45; border-top: 1px solid var(--rule); padding-top: 8px; color: var(--ink);
+}
+.card__why b { font: 600 0.72rem var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-right: 6px; }
+.card__foot {
+  display: flex; flex-wrap: wrap; gap: 4px 12px; font-family: var(--f-label); font-size: 0.82rem; color: var(--ink-3);
+}
+.card__foot a { color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+.card__foot a:hover { color: var(--accent); }
+
+.card--lead .card__headline { font-size: var(--step-4); line-height: 1.04; letter-spacing: -0.01em; }
+.card--lead .card__summary { font-size: var(--step-1); line-height: 1.45; color: var(--ink); max-width: 60ch; }
+.card--lead .card__dek { font-style: italic; color: var(--ink-2); font-size: var(--step-0); }
+.card--lead .card__why { font-size: 1rem; max-width: 62ch; }
+.card__opening { font-size: 1.02rem; line-height: 1.6; max-width: 62ch; }
+.card__more { font: 500 0.9rem var(--f-label); color: var(--accent); }
+.figures {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule); margin-block: 4px;
+}
+.figures div { background: var(--paper); padding: 8px 10px; display: grid; gap: 2px; }
+.figures dt { font: 500 0.72rem var(--f-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.figures dd { margin: 0; font: 500 1.05rem var(--f-mono); font-variant-numeric: tabular-nums; }
+
+.card--rail { grid-template-columns: auto 1fr; column-gap: 14px; }
+.card--rail > * { grid-column: 2; }
+.card--rail .rank {
+  grid-column: 1; grid-row: 1 / span 4; font: 600 2rem/1 var(--f-display); color: var(--ink-3);
+  font-variant-numeric: lining-nums; min-width: 1.2ch;
+}
+.card--compact .card__headline { font-size: 1.12rem; }
+
+/* ---------- Front page ---------- */
+.front { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0 32px; }
+.front__lead { grid-column: span 7; padding-right: 32px; border-right: 1px solid var(--rule); }
+.front__rail { grid-column: span 5; display: grid; align-content: start; }
+.front__rail .card { padding-block: 14px; border-bottom: 1px solid var(--rule); }
+.front__rail .card:first-child { padding-top: 0; }
+.front__rail .card:last-child { border-bottom: 0; }
+
+/* ---------- Section grids ---------- */
+.grid3 { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 24px 32px; }
+.grid3 > .card { padding-right: 32px; border-right: 1px solid var(--rule); }
+.grid3 > .card:nth-child(3n), .grid3 > .card:last-child { border-right: 0; padding-right: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; }
+.empty { color: var(--ink-3); font-style: italic; }
+
+/* Analyst's Corner: set apart on a tinted ground */
+.corner { background: var(--surface); padding: clamp(18px, 3vw, 32px); }
+.corner .band__head { margin-top: 0; }
+.corner .card__headline { font-size: var(--step-2); font-style: italic; font-weight: 600; }
+.corner .card__byline { font: 500 0.85rem var(--f-label); color: var(--ink-2); }
+
+/* Learn Something New */
+.learn { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; }
+.learn .card__headline { font-size: var(--step-3); }
+.takeaways { border: 1px solid var(--ink); padding: 18px 20px; align-self: start; }
+.takeaways h3 { font: 600 0.8rem var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.takeaways ol { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+
+/* Watchlist table */
+.table-scroll { overflow-x: auto; }
+.watch { width: 100%; border-collapse: collapse; font-family: var(--f-label); font-size: 0.95rem; min-width: 640px; }
+.watch th {
+  text-align: left; font-weight: 600; font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--ink-3); border-bottom: 1px solid var(--ink); padding: 6px 10px 6px 0;
+}
+.watch td { border-bottom: 1px solid var(--rule); padding: 10px 10px 10px 0; vertical-align: top; }
+.watch td.time { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.watch .w-title { font-family: var(--f-body); font-weight: 600; font-size: 1rem; }
+.watch .w-desc { color: var(--ink-2); font-size: 0.88rem; margin-top: 2px; }
+.imp { display: inline-flex; gap: 3px; vertical-align: middle; }
+.imp i { width: 7px; height: 12px; background: var(--rule); display: block; }
+.imp[data-level="medium"] i:nth-child(-n+2), .imp[data-level="high"] i, .imp[data-level="low"] i:first-child { background: var(--ink); }
+
+/* ---------- Article page ---------- */
+.article { max-width: 760px; margin-inline: auto; padding-top: 28px; }
+.crumbs { font-family: var(--f-label); font-size: 0.88rem; color: var(--ink-3); display: flex; gap: 6px; flex-wrap: wrap; }
+.crumbs a { color: var(--accent); }
+.article__head { display: grid; gap: 14px; padding-block: 18px 20px; border-bottom: 1px solid var(--ink); }
+.article__head h1 { font-family: var(--f-display); font-size: var(--step-4); line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; }
+.article__dek { font-size: var(--step-1); font-style: italic; color: var(--ink-2); line-height: 1.4; }
+.article__meta { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font-family: var(--f-label); font-size: 0.9rem; color: var(--ink-2); }
+.article__summary { font-size: var(--step-1); line-height: 1.5; padding-block: 20px; border-bottom: 1px solid var(--rule); }
+.prose { max-width: var(--measure); display: grid; gap: 1.05em; padding-block: 24px; font-size: 1.14rem; line-height: 1.68; }
+.prose h2 { font-family: var(--f-display); font-size: var(--step-2); margin-top: 0.6em; line-height: 1.2; }
+.prose blockquote {
+  margin: 0.4em 0; padding-left: 20px; border-left: 3px solid var(--accent);
+  font-size: var(--step-1); font-style: italic; line-height: 1.45;
+}
+.prose blockquote cite { display: block; margin-top: 6px; font: normal 0.85rem var(--f-label); color: var(--ink-3); }
+.prose ul, .prose ol { margin: 0; padding-left: 1.3em; display: grid; gap: 0.4em; }
+.callout { border-top: 3px solid var(--ink); padding-top: 14px; margin-top: 8px; display: grid; gap: 10px; }
+.callout h2 { font: 600 0.82rem var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.callout p { font-size: 1.12rem; line-height: 1.6; }
+.implications { display: grid; gap: 0; margin: 0; }
+.implications div { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 16px; padding-block: 10px; border-bottom: 1px solid var(--rule); }
+.implications dt { font: 600 0.9rem var(--f-label); }
+.implications dd { margin: 0; }
+.sourcebox {
+  margin-top: 28px; padding: 16px 18px; border: 1px solid var(--rule); display: grid; gap: 8px;
+  font-family: var(--f-label); font-size: 0.93rem;
+}
+.sourcebox h2 { font: 600 0.78rem var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+.sourcebox a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; word-break: break-word; }
+.sourcebox dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; }
+.sourcebox dt { color: var(--ink-3); }
+.sourcebox dd { margin: 0; min-width: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.tags a { font: 500 0.8rem var(--f-label); border: 1px solid var(--rule); padding: 3px 8px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.btn {
+  font: 500 0.85rem var(--f-label); letter-spacing: 0.04em; border: 1px solid var(--ink); background: transparent;
+  color: var(--ink); padding: 8px 14px; cursor: pointer;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.related { margin-top: 40px; }
+
+/* ---------- Archive & search ---------- */
+.page-head { padding-top: 28px; display: grid; gap: 6px; }
+.page-head h1 { font-family: var(--f-display); font-size: var(--step-4); line-height: 1.05; }
+.page-head p { color: var(--ink-2); }
+.archive-month { margin-top: 28px; }
+.archive-month h2 { font: 600 0.85rem var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+.archive-row {
+  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
+  padding-block: 14px; border-bottom: 1px solid var(--rule);
+}
+.archive-row .no { font-family: var(--f-mono); font-size: 0.85rem; color: var(--ink-3); }
+.archive-row h3 { font-family: var(--f-display); font-size: 1.2rem; }
+.archive-row .sub { font-family: var(--f-label); font-size: 0.85rem; color: var(--ink-3); margin-top: 2px; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; font-family: var(--f-label); }
+.filters select {
+  font: 0.9rem var(--f-label); padding: 6px 8px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
+}
+.results { display: grid; gap: 0; margin-top: 18px; }
+.results .card { padding-block: 16px; border-bottom: 1px solid var(--rule); }
+mark { background: var(--accent-soft); color: inherit; padding: 0 1px; }
+
+/* ---------- Footer ---------- */
+.footer { border-top: 3px double var(--ink); padding-block: 22px 40px; margin-top: 48px; font-family: var(--f-label); font-size: 0.88rem; color: var(--ink-2); display: grid; gap: 8px; }
+.footer strong { font-family: var(--f-display); font-size: 1.2rem; color: var(--ink); }
+.loading { padding-block: 60px; text-align: center; color: var(--ink-3); font-style: italic; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .front__lead { grid-column: 1 / -1; padding-right: 0; border-right: 0; border-bottom: 1px solid var(--rule); padding-bottom: 22px; margin-bottom: 18px; }
+  .front__rail { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+  .front__rail .card { padding-top: 14px; }
+  .front__rail .card:nth-last-child(2) { border-bottom: 0; }
+  .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid3 > .card { border-right: 0; padding-right: 0; }
+  .search input { width: 9rem; }
+}
+@media (max-width: 720px) {
+  .navbar { flex-wrap: wrap; }
+  .sections-nav { flex-wrap: nowrap; overflow-x: auto; width: 100%; flex-basis: 100%; scrollbar-width: none; }
+  .search { flex: 1; }
+  .search input { width: 100%; }
+  .front__rail, .grid3, .grid2, .learn { grid-template-columns: minmax(0, 1fr); }
+  .front__rail .card:nth-last-child(2) { border-bottom: 1px solid var(--rule); }
+  .grid3 > .card { border-bottom: 1px solid var(--rule); padding-bottom: 20px; }
+  .grid3 > .card:last-child { border-bottom: 0; }
+  .implications div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .archive-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .dateline { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+
+/* ---------- Print: article pages print as a clean single column ---------- */
+@media print {
+  :root { --paper: #fff; --ink: #000; --ink-2: #222; --ink-3: #444; --rule: #999; --accent: #000; --surface: #fff; --demo: #000; --demo-soft: #fff; }
+  body { font-size: 11.5pt; background: #fff; }
+  .navbar, .actions, .related, .theme-toggle, .tagline, .footer nav, .skip, .tags { display: none !important; }
+  .masthead { padding: 0; }
+  .nameplate { padding-block: 0 6pt; }
+  .nameplate h1 { font-size: 22pt; }
+  .dateline { border-bottom: 1pt solid #000; }
+  .article { max-width: none; padding-top: 8pt; }
+  .article__head h1 { font-size: 24pt; }
+  .prose { max-width: none; font-size: 11.5pt; }
+  .prose a[href^="http"]::after, .sourcebox a::after { content: " (" attr(href) ")"; font-size: 9pt; }
+  .callout, .sourcebox, .prose h2 { break-inside: avoid; }
+  .notice { border: 1pt solid #000; }
+  a { text-decoration: none; }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to stories</a>
+  <header class="masthead" id="masthead"></header>
+  <main id="main" tabindex="-1"><p class="loading">Loading today's edition…</p></main>
+  <footer id="footer"></footer>
+  <script>
+window.DAILY_BRIEF_BUNDLE = {"site.json": {"schema_version": "1.0", "title": "The Daily Brief", "tagline": "Markets, deals, policy and the ideas that move capital", "volume": "Vol. I", "timezone": "Asia/Kolkata", "timezone_label": "IST", "locale": "en-IN", "sections": [{"slug": "india", "name": "India Business & Economy", "short": "India", "description": "The economy, RBI, SEBI, interest rates and government policy."}, {"slug": "markets", "name": "Global Markets", "short": "Markets", "description": "Equities, bonds, currencies and commodities, in India and abroad."}, {"slug": "deals", "name": "Investment Banking & Deals", "short": "Deals", "description": "M&A, IPOs, private capital and capital-markets activity."}, {"slug": "corporate", "name": "Corporate Strategy & Earnings", "short": "Companies", "description": "Results, business models, valuations and strategy."}, {"slug": "geopolitics", "name": "Geopolitics & International Trade", "short": "Trade", "description": "Tariffs, trade agreements, supply chains and global economics."}, {"slug": "tech", "name": "Technology & AI", "short": "Tech & AI", "description": "Artificial intelligence, technology and what they mean for business."}, {"slug": "climate", "name": "Climate Finance", "short": "Climate", "description": "Green bonds, transition finance and sustainable business."}, {"slug": "analysis", "name": "The Analyst's Corner", "short": "Analysis", "description": "Deeper analysis of the day's most important developments."}, {"slug": "learn", "name": "Learn Something New", "short": "Learn", "description": "A finance concept or business case study, explained."}], "homepage": [{"type": "front", "title": "Today's Front Page", "count": 5}, {"type": "section", "slug": "india"}, {"type": "section", "slug": "markets"}, {"type": "section", "slug": "deals"}, {"type": "section", "slug": "corporate"}, {"type": "section", "slug": "geopolitics"}, {"type": "section", "slug": "tech"}, {"type": "section", "slug": "climate"}, {"type": "analysis", "slug": "analysis"}, {"type": "learn", "slug": "learn"}, {"type": "watchlist", "title": "Tomorrow's Watchlist"}], "verification_statuses": {"demo": {"label": "Demo", "description": "Fictional demonstration content. Not real news."}, "unverified": {"label": "Unverified", "description": "Ingested automatically; not yet checked against the source."}, "source-linked": {"label": "Source-linked", "description": "Summary checked against the linked original source."}, "verified": {"label": "Verified", "description": "Checked by an editor against primary sources."}, "corrected": {"label": "Corrected", "description": "Updated after publication. See the correction note."}, "evergreen": {"label": "Explainer", "description": "Educational content that does not report news."}}}, "editions.json": {"schema_version": "1.0", "editions": [{"date": "2026-10-12", "edition_number": 48, "published_at": "2026-10-12T06:00:00+05:30", "status": "scheduled", "is_demo": true, "lead_headline": "Scheduled demo story: this edition is hidden until its publish time", "article_count": 1, "verification_counts": {"demo": 1}, "path": "editions/2026-10-12.json"}, {"date": "2026-10-11", "edition_number": 47, "published_at": "2026-10-11T01:00:00+05:30", "status": "published", "is_demo": true, "lead_headline": "Kestrel Industries agrees to buy Coromandel Logistics in ₹18,500 crore cash-and-stock deal", "article_count": 22, "verification_counts": {"demo": 21, "evergreen": 1}, "path": "editions/2026-10-11.json"}, {"date": "2026-10-10", "edition_number": 46, "published_at": "2026-10-10T06:00:00+05:30", "status": "published", "is_demo": true, "lead_headline": "Halcyon Small Finance Bank's IPO is subscribed 46 times on the final day", "article_count": 6, "verification_counts": {"demo": 5, "evergreen": 1}, "path": "editions/2026-10-10.json"}, {"date": "2026-10-09", "edition_number": 45, "published_at": "2026-10-09T06:00:00+05:30", "status": "published", "is_demo": true, "lead_headline": "Saffron Motors posts record quarterly deliveries on SUV demand", "article_count": 3, "verification_counts": {"demo": 3}, "path": "editions/2026-10-09.json"}]}, "editions/2026-10-12.json": {"schema_version": "1.0", "edition_number": 48, "date": "2026-10-12", "published_at": "2026-10-12T06:00:00+05:30", "status": "scheduled", "is_demo": true, "editor_note": "Scheduled demonstration edition.", "articles": [{"id": "2026-10-12-markets-01", "section": "markets", "category": "Bonds", "front_page_rank": 1, "headline": "Scheduled demo story: this edition is hidden until its publish time", "dek": "Shows how scheduled publishing works.", "summary": "This edition has status 'scheduled'. The site shows it only once its published_at time has passed.", "body": ["The front end filters out editions whose publish time is in the future, so a pipeline can write tomorrow's file in advance."], "why_it_matters": "Scheduled publishing lets the pipeline run overnight while the edition goes live at a fixed time.", "implications": [{"label": "For the pipeline", "text": "Write the file early; set status and published_at."}], "author": "Demo Desk", "published_at": "2026-10-12T06:00:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-12/markets-01", "published_at": "2026-10-12T06:00:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["demo"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}], "watchlist": []}, "editions/2026-10-11.json": {"schema_version": "1.0", "edition_number": 47, "date": "2026-10-11", "published_at": "2026-10-11T01:00:00+05:30", "status": "published", "is_demo": true, "editor_note": "This is a demonstration edition. Every story is fictional and exists to show the layout and data structure.", "articles": [{"id": "2026-10-11-deals-01", "section": "deals", "category": "M&A", "front_page_rank": 1, "headline": "Kestrel Industries agrees to buy Coromandel Logistics in ₹18,500 crore cash-and-stock deal", "dek": "The fictional conglomerate pays a 27% premium to build a port-to-warehouse network ahead of a freight upswing.", "summary": "Kestrel Industries, a fictional diversified group, will acquire listed freight operator Coromandel Logistics for about ₹18,500 crore, paying 60% in cash and 40% in new Kestrel shares. The board expects the deal to add to earnings per share in the second full year.", "body": ["Kestrel Industries said it had signed a definitive agreement to acquire Coromandel Logistics, a listed operator of inland container depots and warehousing parks, in a transaction that values the target's equity at roughly ₹18,500 crore.", "Shareholders of Coromandel will receive ₹412 in cash and 0.18 Kestrel shares for each share they hold. The offer represents a 27% premium to Coromandel's 30-day volume-weighted average price, according to the company's presentation.", {"type": "h2", "text": "How the deal is financed"}, "The cash portion will be funded through a mix of internal accruals and a ₹6,000 crore acquisition loan arranged by a syndicate of three banks. Kestrel said its net debt to EBITDA ratio would peak at 2.6 times and fall below 2 times within 24 months.", "Management identified ₹900 crore of annual cost synergies, mostly from consolidating warehouse leases and rerouting rail freight, and a further ₹450 crore of revenue synergies from cross-selling cold-chain capacity to Kestrel's food-processing customers.", {"type": "quote", "text": "We are buying network density at a point in the cycle when freight volumes are about to turn.", "cite": "Kestrel chief executive (fictional)"}, "The transaction requires approval from the competition regulator, the stock exchanges and Coromandel's shareholders. An open offer for an additional 26% stake will be triggered under takeover regulations."], "why_it_matters": "The stock component lets Kestrel keep leverage manageable, but it also dilutes existing shareholders. Whether the deal creates value depends on whether the ₹900 crore of cost synergies arrive on time.", "implications": [{"label": "For acquirers", "text": "Mixed consideration is becoming the default for large Indian deals where the buyer's own stock trades at a premium multiple."}, {"label": "For lenders", "text": "A ₹6,000 crore acquisition loan adds to the pipeline of syndicated M&A financing."}, {"label": "For valuation", "text": "At about 14 times forward EBITDA, the price sets a benchmark for other listed logistics assets."}], "author": "Demo Desk", "published_at": "2026-10-10T21:10:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/deals-01", "published_at": "2026-10-10T21:10:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["M&A", "logistics", "open offer"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_figures": [{"label": "Equity value", "value": "₹18,500 cr"}, {"label": "Premium to 30-day VWAP", "value": "27%"}, {"label": "Cash / stock", "value": "60 / 40"}, {"label": "Cost synergies", "value": "₹900 cr a year"}]}, {"id": "2026-10-11-india-02", "section": "india", "category": "Monetary policy", "front_page_rank": 2, "headline": "Central bank holds policy rate at 5.75%, signals it will act on liquidity before rates", "dek": "An illustrative policy scenario: the vote is unanimous, but the statement leans toward easing as inflation cools.", "summary": "In this demonstration scenario the central bank keeps its benchmark rate unchanged and its stance neutral, while signalling that it will use liquidity tools to push lending rates lower before considering a cut.", "body": ["The monetary policy committee kept the policy repo rate at 5.75% in a unanimous decision, in line with the expectations of most economists surveyed before the meeting.", "The committee lowered its inflation projection for the current fiscal year to 3.9% from 4.3%, citing softer food prices and stable fuel costs. Its growth forecast was unchanged at 6.6%.", "The governor said the transmission of earlier rate cuts to bank lending rates remained incomplete and that the central bank would keep system liquidity in surplus through variable-rate operations.", "Bond markets read the statement as a signal that a rate cut is possible early next year if inflation stays below 4%."], "why_it_matters": "Liquidity is the quicker lever: it moves short-term borrowing costs for companies and banks without the signalling weight of a rate change.", "implications": [{"label": "For banks", "text": "Surplus liquidity lowers funding costs but can compress net interest margins if loan rates fall faster than deposit rates."}, {"label": "For borrowers", "text": "Corporate treasurers may find commercial paper cheaper over the next quarter."}, {"label": "For bond investors", "text": "Short-dated government bonds tend to rally first when liquidity is eased."}], "author": "Demo Desk", "published_at": "2026-10-10T21:15:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/india-02", "published_at": "2026-10-10T21:15:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["interest rates", "inflation", "liquidity"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_figures": [{"label": "Policy rate", "value": "5.75%"}, {"label": "Inflation forecast", "value": "3.9%"}, {"label": "Growth forecast", "value": "6.6%"}]}, {"id": "2026-10-11-markets-03", "section": "markets", "category": "Bonds", "front_page_rank": 3, "headline": "Global bond yields slip after a softer US payrolls print in this demo session", "dek": "Ten-year yields fall across major markets; emerging-market currencies firm against the dollar.", "summary": "A weaker-than-expected US jobs report in this fictional scenario pushes traders to bring forward expected Fed rate cuts, pulling global yields lower and lifting emerging-market assets.", "body": ["Benchmark 10-year yields fell between 6 and 11 basis points across developed markets after the illustrative US employment report showed payroll growth of 82,000, well short of the 140,000 consensus.", "Futures markets moved to price a higher probability of a rate cut at the next Federal Reserve meeting. The dollar index fell 0.6%.", "In Asia, the rupee and the Indonesian rupiah were among the best-performing currencies, and foreign investors were net buyers of Indian government bonds for a fourth straight session."], "why_it_matters": "Lower US yields loosen financial conditions worldwide. Foreign inflows into Indian debt and equities usually rise when the dollar weakens.", "implications": [{"label": "For Indian markets", "text": "A weaker dollar gives the central bank more room to ease without pressuring the rupee."}, {"label": "For exporters", "text": "A firmer rupee trims export realisations for IT services and pharma companies."}], "author": "Demo Desk", "published_at": "2026-10-10T21:20:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/markets-03", "published_at": "2026-10-10T21:20:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["yields", "Fed", "rupee"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-tech-04", "section": "tech", "category": "Semiconductors", "front_page_rank": 4, "headline": "Northwind Semiconductors to build ₹11,000 crore AI chip packaging plant", "dek": "The fictional chipmaker will make advanced packages for AI accelerators, with first output planned for 2028.", "summary": "Northwind Semiconductors, a fictional company, plans a ₹11,000 crore advanced-packaging facility. It is betting that packaging capacity, more than chip fabrication, is the bottleneck in AI hardware supply.", "body": ["Northwind said the plant would assemble and test high-bandwidth memory stacks and chiplet-based accelerator packages for data-centre customers.", "The company expects about half of the capital cost to be covered by central and state incentive schemes. It has signed a non-binding supply agreement with one global AI hardware customer, which it did not name.", "Analysts at a fictional brokerage estimate that advanced packaging capacity worldwide will need to more than double by 2030 to meet demand for AI accelerators."], "why_it_matters": "Packaging is a less capital-intensive entry point into the semiconductor supply chain than fabrication, and it sits close to the part of the AI build-out where shortages are most acute.", "implications": [{"label": "For investors", "text": "Incentive-backed projects reduce capital at risk, but returns depend on securing long-term customer contracts."}, {"label": "For the supply chain", "text": "Local packaging capacity could pull suppliers of substrates and specialty chemicals into the country."}], "author": "Demo Desk", "published_at": "2026-10-10T21:25:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/tech-04", "published_at": "2026-10-10T21:25:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["AI", "semiconductors", "capex"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-geopolitics-05", "section": "geopolitics", "category": "Tariffs", "front_page_rank": 5, "headline": "Trade bloc proposes tariff relief on electronic components in this illustrative scenario", "dek": "The draft cuts duties on 140 component lines; finished-goods tariffs stay in place.", "summary": "A fictional regional trade bloc has proposed phasing out tariffs on 140 categories of electronic components over three years, while keeping duties on finished consumer electronics.", "body": ["The proposal, published for consultation, targets printed circuit boards, connectors, passive components and camera modules.", "Officials said the aim was to lower input costs for manufacturers assembling devices within the bloc. Duties on finished smartphones and laptops are unchanged, so local assembly keeps its advantage over imports.", "Industry groups welcomed the draft but asked for a faster timetable. Some domestic component makers warned that removing protection too quickly could make their new plants uncompetitive."], "why_it_matters": "Tariff design shapes where value is added. Cutting duties on inputs while keeping them on outputs is a common way to attract assembly without giving up protection.", "implications": [{"label": "For manufacturers", "text": "Lower component costs improve assembly margins, which matters most for contract manufacturers."}, {"label": "For component makers", "text": "Domestic suppliers face more import competition and may need to specialise."}], "author": "Demo Desk", "published_at": "2026-10-10T21:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/geopolitics-05", "published_at": "2026-10-10T21:30:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["tariffs", "electronics", "supply chains"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-india-06", "section": "india", "category": "Public finance", "front_page_rank": null, "headline": "Indirect tax collections rise 9% as states press for a larger share", "dek": "Demo data: growth is led by domestic transactions; import-linked collections are flat.", "summary": "Monthly indirect tax collections in this illustrative scenario rise 9% from a year earlier. Several states use the figures to argue for a review of the revenue-sharing formula.", "body": ["Domestic-transaction collections grew 11%, offsetting flat import-linked receipts. Refunds rose 14%, reflecting higher export activity.", "Finance ministers from four states said in a joint letter that their share of the pool had not kept pace with spending obligations on health and education."], "why_it_matters": "Collections are a timely indicator of consumption. The fight over revenue sharing could affect state capital spending plans.", "implications": [{"label": "For the economy", "text": "Steady collections support the central government's deficit target."}, {"label": "For states", "text": "A formula change would change borrowing needs in the state bond market."}], "author": "Demo Desk", "published_at": "2026-10-10T22:05:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/india-06", "published_at": "2026-10-10T22:05:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["tax", "fiscal"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-india-07", "section": "india", "category": "Regulation", "front_page_rank": null, "headline": "Market regulator proposes stricter disclosure rules for SME IPOs", "dek": "The consultation paper would require audited segment data and a cap on offer-for-sale portions.", "summary": "In this illustrative scenario the securities regulator proposes tighter rules for small and medium-enterprise listings after a surge in heavily oversubscribed issues.", "body": ["The paper proposes capping the offer-for-sale portion at 20% of the issue, requiring two years of audited segment-level financials and lengthening promoter lock-ins.", "Comments are invited for 30 days. Merchant bankers said the rules would lengthen preparation times but improve investor confidence."], "why_it_matters": "SME platforms have become a fast route to listing. Tighter disclosure protects retail investors but raises costs for small issuers.", "implications": [{"label": "For bankers", "text": "Smaller mandates will need more diligence work per deal."}, {"label": "For investors", "text": "Better disclosure should narrow the gap between listing-day pops and longer-term returns."}], "author": "Demo Desk", "published_at": "2026-10-10T22:20:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/india-07", "published_at": "2026-10-10T22:20:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["IPO", "regulation", "SME"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-markets-08", "section": "markets", "category": "Equities", "front_page_rank": null, "headline": "Mid-cap index beats large caps for a third week on domestic fund flows", "dek": "Demo: mutual fund inflows offset foreign selling; valuations stretch further.", "summary": "Mid-cap stocks extend their outperformance in this fictional week, supported by steady systematic investment plan inflows, while foreign portfolio investors stay net sellers.", "body": ["The mid-cap index rose 2.4% for the week against 0.9% for the large-cap benchmark. Domestic institutions bought a net ₹14,200 crore of equities.", "The mid-cap index now trades at about 31 times forward earnings, above its 10-year average of 24 times, according to fictional brokerage estimates."], "why_it_matters": "Domestic savings are now a steadier force in Indian equities than foreign flows, but rich valuations leave little room for earnings disappointments.", "implications": [{"label": "For portfolio managers", "text": "Liquidity risk rises when valuations are high and flows are concentrated."}, {"label": "For issuers", "text": "Strong mid-cap demand keeps the IPO window open."}], "author": "Demo Desk", "published_at": "2026-10-10T22:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/markets-08", "published_at": "2026-10-10T22:30:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["equities", "mutual funds"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-markets-09", "section": "markets", "category": "Commodities", "front_page_rank": null, "headline": "Brent crude eases to $71 as supply concerns fade", "dek": "Illustrative price move: a lower oil bill would help the rupee and India's current account.", "summary": "Oil prices fall in this demonstration scenario as inventories build and shipping disruptions ease, a welcome development for oil-importing economies.", "body": ["Brent crude fell 3.1% over the week to $71 a barrel. Refining margins also narrowed.", "For India, which imports most of its crude, every $10 fall in oil prices is commonly estimated to narrow the current account deficit by roughly 0.3–0.4% of GDP."], "why_it_matters": "Oil is India's largest import. Lower prices ease inflation, the trade deficit and pressure on the rupee at the same time.", "implications": [{"label": "For oil marketers", "text": "Lower crude costs improve marketing margins if retail prices stay unchanged."}, {"label": "For airlines and paints", "text": "Input costs fall, supporting margins."}], "author": "Demo Desk", "published_at": "2026-10-10T22:40:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/markets-09", "published_at": "2026-10-10T22:40:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["oil", "current account"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-deals-10", "section": "deals", "category": "IPOs", "front_page_rank": null, "headline": "Indus Ridge Pharma files draft prospectus for ₹2,400 crore IPO", "dek": "The fictional drugmaker plans a fresh issue to repay debt and fund a US injectables plant.", "summary": "Indus Ridge Pharma, a fictional company, has filed draft papers for an initial public offering made up of a ₹1,400 crore fresh issue and a ₹1,000 crore offer for sale by a private equity investor.", "body": ["The company plans to use ₹800 crore of the proceeds to repay borrowings and ₹450 crore for a sterile injectables facility that will supply the US market.", "Revenue grew 18% last fiscal year to ₹3,100 crore, with an EBITDA margin of 21%. Three investment banks are managing the issue."], "why_it_matters": "A mix of fresh issue and secondary sale is typical of PE-backed IPOs. The use of proceeds shows how much of the money goes into the business.", "implications": [{"label": "For investors", "text": "Debt repayment lifts return on equity after listing."}, {"label": "For bankers", "text": "Healthcare remains one of the most active sectors in the IPO pipeline."}], "author": "Demo Desk", "published_at": "2026-10-10T22:50:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/deals-10", "published_at": "2026-10-10T22:50:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["IPO", "pharma", "private equity"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_figures": [{"label": "Issue size", "value": "₹2,400 cr"}, {"label": "Fresh issue", "value": "₹1,400 cr"}, {"label": "Offer for sale", "value": "₹1,000 cr"}]}, {"id": "2026-10-11-deals-11", "section": "deals", "category": "Private equity", "front_page_rank": null, "headline": "Bluestone Capital closes $1.2 billion Asia mid-market buyout fund", "dek": "The fictional manager says about 40% of the fund will go to Indian control deals.", "summary": "Bluestone Capital, a fictional private equity firm, has closed its fourth Asia fund above its $1 billion target, with India expected to take the largest share.", "body": ["The fund will target control and significant-minority stakes in healthcare, financial services and industrial technology companies with enterprise values between $100 million and $500 million.", "Limited partners include sovereign wealth funds, pension funds and insurance companies. About 60% of commitments came from existing investors."], "why_it_matters": "Fresh dry powder for mid-market control deals supports valuations and gives founders an alternative to an IPO.", "implications": [{"label": "For founders", "text": "More buyout capital improves negotiating leverage in sale processes."}, {"label": "For exits", "text": "PE-backed companies feed the IPO and secondary-sale pipeline three to five years out."}], "author": "Demo Desk", "published_at": "2026-10-10T23:05:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/deals-11", "published_at": "2026-10-10T23:05:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["private equity", "fundraising"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-corporate-12", "section": "corporate", "category": "Earnings", "front_page_rank": null, "headline": "Vardhan Cement's Q2 margin falls 310 basis points on fuel costs", "dek": "Demo results: volumes grow 8%, but pet-coke prices and weak monsoon-season pricing weigh.", "summary": "Vardhan Cement, a fictional producer, reports an 8% rise in volumes, but its EBITDA per tonne falls to ₹780 from ₹1,010 a year earlier as fuel costs rise and prices soften.", "body": ["Revenue rose 5% to ₹4,250 crore. Power and fuel costs per tonne increased 12%.", "Management said it expected prices to recover after the monsoon and reiterated its target of adding 10 million tonnes a year of capacity by 2028."], "why_it_matters": "Cement margins are a proxy for construction demand and pricing discipline. A per-tonne view shows the business more clearly than headline profit.", "implications": [{"label": "For valuation", "text": "Cement companies are often valued on EV per tonne of capacity; margin pressure weighs on that multiple."}, {"label": "For the sector", "text": "Capacity additions across the industry could keep pricing under pressure."}], "author": "Demo Desk", "published_at": "2026-10-10T23:15:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/corporate-12", "published_at": "2026-10-10T23:15:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["earnings", "cement"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_figures": [{"label": "Volume growth", "value": "+8%"}, {"label": "EBITDA/tonne", "value": "₹780"}, {"label": "Margin change", "value": "−310 bp"}]}, {"id": "2026-10-11-corporate-13", "section": "corporate", "category": "Strategy", "front_page_rank": null, "headline": "Meridian Retail moves to a franchise model to cut capital spending", "dek": "The fictional chain will convert 300 company-owned stores over two years.", "summary": "Meridian Retail, a fictional apparel chain, says it will convert 300 of its 520 company-operated stores to franchise partners, releasing about ₹1,100 crore of capital.", "body": ["Under the new model, franchisees will fund store fit-outs and inventory, while Meridian keeps control of design, sourcing and pricing.", "The company expects its return on capital employed to rise from 14% to above 22%, even though revenue per store recognised by Meridian will fall."], "why_it_matters": "Asset-light models trade revenue for higher returns on capital. Investors usually reward that shift with a higher valuation multiple.", "implications": [{"label": "For investors", "text": "Watch franchise royalty rates and same-store sales to judge whether the brand holds up."}, {"label": "For competitors", "text": "Faster expansion by franchisees could intensify competition in smaller cities."}], "author": "Demo Desk", "published_at": "2026-10-10T23:25:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/corporate-13", "published_at": "2026-10-10T23:25:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["strategy", "retail", "asset-light"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-geopolitics-14", "section": "geopolitics", "category": "Shipping", "front_page_rank": null, "headline": "Shipping insurers raise war-risk premiums on a key strait route", "dek": "Demo scenario: higher insurance adds about $90,000 to the cost of a typical container voyage.", "summary": "Marine insurers in this illustrative scenario raise war-risk premiums for vessels crossing a busy strait, adding to freight costs for trade between Asia and Europe.", "body": ["Premiums rose to 0.35% of hull value from 0.2%. Some carriers said they would reroute services, adding 8 to 10 days to journeys.", "Freight forwarders expect spot container rates on Asia–Europe lanes to rise by 10–15% over the next month."], "why_it_matters": "Shipping costs feed directly into import prices and delivery times. Exporters with thin margins feel the effect first.", "implications": [{"label": "For exporters", "text": "Longer transit times tie up working capital in inventory."}, {"label": "For inflation", "text": "Sustained freight increases can lift goods prices with a lag of a few months."}], "author": "Demo Desk", "published_at": "2026-10-10T23:35:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/geopolitics-14", "published_at": "2026-10-10T23:35:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["shipping", "freight", "insurance"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-geopolitics-15", "section": "geopolitics", "category": "Trade agreements", "front_page_rank": null, "headline": "Bilateral trade talks enter final round with services access unresolved", "dek": "Illustrative: negotiators agree on goods tariffs but differ on visas for professionals.", "summary": "In this fictional negotiation, two trading partners have agreed on tariff schedules for most goods but remain apart on market access for services and the movement of professionals.", "body": ["Officials said the goods chapter would eliminate duties on about 85% of tariff lines over seven years.", "The main open issues are recognition of professional qualifications and temporary work visas, which matter for IT and engineering services firms."], "why_it_matters": "Services access often determines how much a trade deal is worth to a services-heavy economy.", "implications": [{"label": "For IT services", "text": "Easier mobility of professionals lowers the cost of onsite delivery."}, {"label": "For manufacturers", "text": "Tariff cuts on inputs can improve export competitiveness."}], "author": "Demo Desk", "published_at": "2026-10-10T23:45:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/geopolitics-15", "published_at": "2026-10-10T23:45:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["trade deal", "services"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-tech-16", "section": "tech", "category": "Enterprise AI", "front_page_rank": null, "headline": "Enterprise AI budgets shift from pilots to production, survey finds", "dek": "Demo survey: 58% of large companies say at least one AI system is now in full production.", "summary": "A fictional survey of 400 chief information officers finds that spending on AI is moving from experiments to production systems, with customer service and software development leading.", "body": ["58% of respondents said they had at least one AI application in full production, up from 31% a year earlier.", "The most common obstacles cited were data quality, integration with existing systems and uncertainty about measuring returns."], "why_it_matters": "Production deployments create recurring spending on compute, data infrastructure and services, which matters more for revenue than pilot budgets.", "implications": [{"label": "For IT services firms", "text": "Implementation and integration work is where most services revenue sits."}, {"label": "For cloud providers", "text": "Production workloads drive steadier consumption of compute."}], "author": "Demo Desk", "published_at": "2026-10-11T00:00:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/tech-16", "published_at": "2026-10-11T00:00:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["AI", "enterprise software"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-tech-17", "section": "tech", "category": "IT services", "front_page_rank": null, "headline": "Lotus Systems signs AI-led outsourcing deal worth $650 million", "dek": "The fictional IT company will use AI agents to run back-office operations for a European insurer.", "summary": "Lotus Systems, a fictional IT services company, has signed a seven-year contract under which pricing is linked to outcomes such as claims processed rather than staff hours.", "body": ["The contract covers claims handling, policy administration and IT support. Lotus expects to deliver the work with about 40% fewer people than a traditional contract.", "Outcome-based pricing shifts productivity gains from the client to the vendor, but it also moves delivery risk onto the vendor."], "why_it_matters": "AI is changing how IT services contracts are priced. Outcome-based deals can lift margins but make revenue less predictable.", "implications": [{"label": "For the sector", "text": "Headcount-led revenue models face pressure as clients ask for AI-driven savings."}, {"label": "For investors", "text": "Watch deal margins and the share of outcome-priced revenue."}], "author": "Demo Desk", "published_at": "2026-10-11T00:10:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/tech-17", "published_at": "2026-10-11T00:10:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["AI", "IT services", "outsourcing"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-climate-18", "section": "climate", "category": "Green bonds", "front_page_rank": null, "headline": "Aravali Power prices $500 million green bond at a tight spread", "dek": "The fictional utility's five-year bond was three times oversubscribed.", "summary": "Aravali Power, a fictional renewable energy producer, has raised $500 million through a five-year green bond priced at 165 basis points over US Treasuries.", "body": ["Proceeds will fund 1.8 gigawatts of solar and wind capacity with battery storage. Orders exceeded $1.5 billion, mostly from Asian and European funds.", "The company said the bond follows its green financing framework, which has been reviewed by an independent second-party opinion provider."], "why_it_matters": "Strong demand for labelled bonds can lower the cost of capital for renewable developers, which matters because their projects are capital-intensive.", "implications": [{"label": "For issuers", "text": "A 'greenium', or pricing benefit for green bonds, is small but can be meaningful in large issues."}, {"label": "For investors", "text": "Use-of-proceeds reporting is the main safeguard against greenwashing."}], "author": "Demo Desk", "published_at": "2026-10-11T00:20:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/climate-18", "published_at": "2026-10-11T00:20:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["green bonds", "renewables"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-climate-19", "section": "climate", "category": "Carbon markets", "front_page_rank": null, "headline": "Draft carbon market rules draw pushback over baseline methods", "dek": "Illustrative consultation: steel and cement makers seek longer transition periods.", "summary": "In this fictional consultation, industry groups have asked regulators to revise how emissions-intensity baselines are set under a proposed domestic carbon-credit trading scheme.", "body": ["Steel and cement producers argued that using a single recent year as a baseline would penalise plants that had already invested in efficiency.", "Regulators are expected to publish final rules after reviewing comments. Trading is due to start with a pilot phase covering energy-intensive sectors."], "why_it_matters": "A carbon price creates a new cost line for heavy industry, and baseline rules decide who pays and who earns credits.", "implications": [{"label": "For heavy industry", "text": "Efficient plants could earn tradable credits; laggards may need to buy them."}, {"label": "For valuation", "text": "Analysts may start modelling carbon costs in earnings forecasts."}], "author": "Demo Desk", "published_at": "2026-10-11T00:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/climate-19", "published_at": "2026-10-11T00:30:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["carbon market", "steel", "cement"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-analysis-20", "section": "analysis", "category": "Analysis", "front_page_rank": null, "headline": "Why cash-and-stock deals are back in Indian M&A", "dek": "High acquirer valuations, cautious lenders and tax rules all point the same way. Here is how to read the trend.", "summary": "Mixed consideration lets acquirers use richly valued shares as currency while keeping leverage in check. It also leaves target shareholders exposed to the combined company's performance. This demo analysis walks through the trade-offs.", "body": ["Large Indian acquisitions were long dominated by all-cash offers. Cash is certain for sellers and avoids diluting the buyer's shareholders. The fictional Kestrel–Coromandel transaction on today's front page is a useful case study in why that is changing.", {"type": "h2", "text": "Expensive shares are a strong currency"}, "When an acquirer trades at a higher price-to-earnings multiple than its target, issuing shares to pay for the target can increase earnings per share even before synergies. The arithmetic is simple: the buyer gives up less earnings power per rupee of shares issued than it gains from the target's profits.", "Many listed Indian companies now trade at multiples well above their own history. That makes stock a cheaper form of payment than it was five years ago.", {"type": "h2", "text": "Lenders and rating agencies set the limit"}, "Acquisition debt is available, but rating agencies watch leverage closely. Paying partly in stock keeps net debt to EBITDA within the range that protects a credit rating, which in turn keeps borrowing costs down across the group.", {"type": "h2", "text": "What sellers give up"}, "Target shareholders who receive stock take on the risk that the combined company underperforms. That is why stock-heavy offers usually need a higher headline premium, and why the exchange ratio, collars and lock-ups get so much attention in negotiations.", {"type": "list", "items": ["Check the exchange ratio against both companies' historical trading ranges.", "Look for a collar that protects sellers if the acquirer's share price falls before closing.", "Compare the dilution in year one with the synergy timeline."]}, "The pattern to watch is whether mixed deals continue once acquirer valuations normalise. If they do, it suggests a structural shift in how Indian boards think about capital, not just a response to high share prices."], "why_it_matters": "Deal structure decides who carries the risk after closing. Understanding it helps you judge whether a premium is real value or paid in an inflated currency.", "implications": [{"label": "For analysts", "text": "Model accretion/dilution under different share-price scenarios, not just the announcement-day price."}, {"label": "For target boards", "text": "Stock consideration needs scrutiny of the acquirer's valuation as well as the target's."}, {"label": "For bankers", "text": "Structuring advice, including collars and earn-outs, becomes a bigger part of the mandate."}], "author": "The Analyst's Corner (demo)", "published_at": "2026-10-11T01:00:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/analysis-20", "published_at": "2026-10-11T01:00:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["M&A", "deal structure", "valuation"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-analysis-21", "section": "analysis", "category": "Analysis", "front_page_rank": null, "headline": "What a long pause in rate cuts means for bank margins", "dek": "Liquidity easing without a rate cut can squeeze lenders in ways the headline rate does not show.", "summary": "When a central bank eases through liquidity, loan rates linked to external benchmarks can fall faster than deposit rates. This demo analysis explains how that affects net interest margins at different kinds of banks.", "body": ["Most new floating-rate retail and small-business loans in India are linked to external benchmarks, so their rates change quickly when market rates move. Deposits reprice slowly because most are fixed-term.", {"type": "h2", "text": "Who is most exposed"}, "Banks with a high share of benchmark-linked loans and a low share of current and savings account deposits feel the squeeze first. Lenders with large low-cost deposit franchises are better protected.", "Over time, deposit rates catch up and margins recover. The question for investors is how long the gap lasts and whether loan growth makes up for thinner spreads."], "why_it_matters": "Bank margins drive the earnings of the largest sector in Indian equity indices, so monetary policy decisions feed quickly into market performance.", "implications": [{"label": "For bank investors", "text": "Track the share of externally benchmarked loans and the CASA ratio."}, {"label": "For borrowers", "text": "Floating-rate borrowers benefit sooner than depositors lose."}], "author": "The Analyst's Corner (demo)", "published_at": "2026-10-11T01:15:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/analysis-21", "published_at": "2026-10-11T01:15:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["banks", "interest rates", "NIM"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-11-learn-22", "section": "learn", "category": "Concept", "front_page_rank": null, "headline": "Accretion and dilution: how an acquirer tests whether a deal pays", "dek": "A step-by-step guide to the first analysis every M&A banker runs.", "summary": "Accretion/dilution analysis asks a simple question: after the deal, will the buyer's earnings per share be higher or lower than without it? This explainer shows how to calculate it and what it leaves out.", "body": ["An acquisition is accretive if the combined company's earnings per share (EPS) are higher than the acquirer's standalone EPS. It is dilutive if they are lower.", {"type": "h2", "text": "The basic calculation"}, {"type": "list", "items": ["Start with the acquirer's net income and the target's net income.", "Add after-tax synergies.", "Subtract the after-tax interest on any new debt and the interest income lost on cash used.", "Divide by the acquirer's share count plus any new shares issued.", "Compare the result with the acquirer's standalone EPS."]}, {"type": "h2", "text": "A quick rule of thumb"}, "In an all-stock deal, the transaction is accretive before synergies if the acquirer's P/E multiple is higher than the P/E it is paying for the target. In a debt-funded deal, compare the after-tax cost of debt with the target's earnings yield (the inverse of the P/E paid).", {"type": "h2", "text": "What it does not tell you"}, "EPS accretion is not the same as value creation. A deal can be accretive and still destroy value if the buyer overpays relative to the target's future cash flows, or if the extra debt raises the company's risk. Bankers pair accretion/dilution with discounted cash flow and return-on-capital analysis."], "why_it_matters": "It is the first number boards and investors ask about when a deal is announced, so knowing how it is built helps you read deal presentations critically.", "implications": [{"label": "Try it", "text": "Apply the rule of thumb to the Kestrel–Coromandel example on today's front page."}], "author": "Learn Something New", "published_at": "2026-10-11T01:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-11/learn-22", "published_at": "2026-10-11T01:30:00+05:30", "type": "demo"}, "verification": {"status": "evergreen", "checked_by": null, "checked_at": null, "notes": "Educational explainer. The method is standard; the referenced company example is fictional."}, "tags": ["M&A", "valuation", "EPS"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_takeaways": ["Accretive means pro forma EPS is above standalone EPS.", "All-stock deals: compare the buyer's P/E with the P/E paid.", "Debt-funded deals: compare after-tax cost of debt with the target's earnings yield.", "Accretion is not proof of value creation."]}], "watchlist": [{"id": "2026-10-12-watch-01", "date": "2026-10-12", "time": "16:00", "timezone": "Asia/Kolkata", "title": "Consumer price inflation (September)", "category": "Economic data", "region": "India", "importance": "high", "description": "Headline and core inflation. Placeholder; confirm the official release time.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-01"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-12-watch-02", "date": "2026-10-12", "time": "17:30", "timezone": "Asia/Kolkata", "title": "Industrial production index (August)", "category": "Economic data", "region": "India", "importance": "medium", "description": "Factory output growth by sector.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-02"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-12-watch-03", "date": "2026-10-12", "time": "11:00", "timezone": "Asia/Kolkata", "title": "Coromandel Logistics board meeting", "category": "Corporate", "region": "India", "importance": "high", "description": "Fictional: board to consider the Kestrel offer and appoint an independent adviser.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-03"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-12-watch-04", "date": "2026-10-12", "time": "After close", "timezone": "Asia/Kolkata", "title": "Lotus Systems Q2 results", "category": "Earnings", "region": "India", "importance": "medium", "description": "Fictional: watch deal wins and outcome-priced revenue.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-04"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-12-watch-05", "date": "2026-10-12", "time": "10:00", "timezone": "Asia/Kolkata", "title": "Indus Ridge Pharma anchor book", "category": "IPO", "region": "India", "importance": "low", "description": "Fictional: anchor investor allocation ahead of the issue opening.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-05"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-12-watch-06", "date": "2026-10-12", "time": "18:00", "timezone": "Asia/Kolkata", "title": "US retail sales (September)", "category": "Economic data", "region": "United States", "importance": "medium", "description": "Signals the strength of US consumer demand.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-12-06"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}]}, "editions/2026-10-10.json": {"schema_version": "1.0", "edition_number": 46, "date": "2026-10-10", "published_at": "2026-10-10T06:00:00+05:30", "status": "published", "is_demo": true, "editor_note": "Demonstration edition with fictional stories.", "articles": [{"id": "2026-10-10-deals-01", "section": "deals", "category": "IPOs", "front_page_rank": 1, "headline": "Halcyon Small Finance Bank's IPO is subscribed 46 times on the final day", "dek": "Demo: institutional demand drives the book; retail portion subscribed 9 times.", "summary": "Halcyon Small Finance Bank, a fictional lender, closes its ₹1,800 crore IPO with bids worth more than ₹80,000 crore.", "body": ["Qualified institutional buyers bid for 112 times the shares reserved for them. The price band valued the bank at 2.1 times its book value.", "Listing is scheduled for next week."], "why_it_matters": "Heavy oversubscription points to strong appetite for financial-sector listings, but large QIB books can inflate listing-day expectations.", "implications": [{"label": "For issuers", "text": "Banks with clean asset quality can command premium book multiples."}, {"label": "For investors", "text": "Allotment odds are low when books are this oversubscribed."}], "author": "Demo Desk", "published_at": "2026-10-10T06:10:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/deals-01", "published_at": "2026-10-10T06:10:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["IPO", "banking"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-10-india-02", "section": "india", "category": "Economy", "front_page_rank": 2, "headline": "Services activity expands at the fastest pace in five months", "dek": "Illustrative PMI reading: new export orders lead the gain.", "summary": "A fictional services purchasing managers' index rises to 60.2, with new export orders at a multi-month high.", "body": ["Firms reported stronger demand from overseas clients in IT and business services.", "Input cost inflation eased, though wage costs rose."], "why_it_matters": "Services account for more than half of India's output, so a strong PMI supports the growth outlook.", "implications": [{"label": "For policy", "text": "Strong growth reduces urgency for rate cuts."}], "author": "Demo Desk", "published_at": "2026-10-10T06:20:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/india-02", "published_at": "2026-10-10T06:20:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["PMI", "services"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-10-markets-03", "section": "markets", "category": "Currencies", "front_page_rank": 3, "headline": "Rupee holds near 84 per dollar as central bank smooths volatility", "dek": "Demo scenario: forex reserves rise for a third week.", "summary": "In this fictional session the rupee trades in a narrow range as the central bank buys dollars on dips.", "body": ["Traders said the central bank was absorbing inflows to build reserves.", "One-month implied volatility fell to its lowest in a year."], "why_it_matters": "Low currency volatility reduces hedging costs for importers and foreign investors.", "implications": [{"label": "For corporates", "text": "Cheaper hedges make foreign-currency borrowing more attractive."}], "author": "Demo Desk", "published_at": "2026-10-10T06:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/markets-03", "published_at": "2026-10-10T06:30:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["rupee", "forex"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-10-tech-04", "section": "tech", "category": "AI", "front_page_rank": 4, "headline": "Cloud providers expand AI data-centre capacity in India", "dek": "Illustrative: three fictional providers announce combined investment of $4 billion.", "summary": "Three fictional cloud companies announce new data-centre regions in India, citing demand for AI workloads and data-residency rules.", "body": ["The new regions will add about 600 megawatts of capacity over four years.", "Power availability and renewable energy contracts were cited as the main constraints."], "why_it_matters": "Data-centre build-outs drive demand for power, real estate and network infrastructure.", "implications": [{"label": "For utilities", "text": "Long-term power purchase agreements with data centres are a growing revenue source."}], "author": "Demo Desk", "published_at": "2026-10-10T06:40:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/tech-04", "published_at": "2026-10-10T06:40:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["AI", "data centres"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-10-geopolitics-05", "section": "geopolitics", "category": "Trade", "front_page_rank": 5, "headline": "Export credit agency widens cover for exporters to new markets", "dek": "Demo: premium subsidies extended to African and Latin American buyers.", "summary": "A fictional export credit agency extends subsidised insurance cover to shipments bound for 30 new markets.", "body": ["Exporters will pay lower premiums on cover against buyer default and political risk.", "The scheme runs for two years."], "why_it_matters": "Credit insurance helps small exporters take on new buyers in markets where payment risk is hard to assess.", "implications": [{"label": "For exporters", "text": "Lower premiums make diversification away from traditional markets cheaper."}], "author": "Demo Desk", "published_at": "2026-10-10T06:50:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/geopolitics-05", "published_at": "2026-10-10T06:50:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["exports", "trade finance"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-10-learn-06", "section": "learn", "category": "Case study", "front_page_rank": null, "headline": "Case study: how a greenshoe option stabilises an IPO", "dek": "The over-allotment mechanism explained in four steps.", "summary": "A greenshoe option lets underwriters sell up to 15% more shares than planned and later buy them back in the market if the price falls, supporting the stock after listing.", "body": ["Underwriters over-allot shares at the IPO, creating a short position.", {"type": "list", "items": ["If the share price falls below the offer price, they buy shares in the market to cover the short, supporting the price.", "If the price rises, they exercise the option to buy extra shares from the issuer at the offer price.", "Either way, the short position is closed within the stabilisation period."]}, "The mechanism gives underwriters a way to support a new listing without taking a large market risk."], "why_it_matters": "Understanding price stabilisation helps explain why some newly listed stocks hold steady near their offer price in their first weeks.", "implications": [{"label": "Watch for", "text": "The stabilisation period ending, which removes that support."}], "author": "Learn Something New", "published_at": "2026-10-10T10:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-10/learn-06", "published_at": "2026-10-10T10:30:00+05:30", "type": "demo"}, "verification": {"status": "evergreen", "checked_by": null, "checked_at": null, "notes": "Educational explainer. Mechanism is standard; no news is reported."}, "tags": ["IPO", "ECM"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}, "key_takeaways": ["Over-allotment is usually up to 15% of the base issue.", "It creates a short position the underwriter can cover.", "Support ends when the stabilisation period does."]}], "watchlist": [{"id": "2026-10-11-watch-01", "date": "2026-10-11", "time": "All day", "timezone": "Asia/Kolkata", "title": "Policy statement digest", "category": "Policy", "region": "India", "importance": "high", "description": "Fictional: review of the central bank's policy statement.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-11-01"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}, {"id": "2026-10-11-watch-02", "date": "2026-10-11", "time": "09:00", "timezone": "Asia/Kolkata", "title": "Kestrel Industries investor call", "category": "Corporate", "region": "India", "importance": "medium", "description": "Fictional: management call on strategy.", "source": {"name": "Demonstration calendar (fictional)", "url": "https://example.com/demo/calendar/2026-10-11-02"}, "verification": {"status": "demo", "notes": "Placeholder event. Confirm against the official calendar before relying on it."}, "is_demo": true}]}, "editions/2026-10-09.json": {"schema_version": "1.0", "edition_number": 45, "date": "2026-10-09", "published_at": "2026-10-09T06:00:00+05:30", "status": "published", "is_demo": true, "editor_note": "Demonstration edition with fictional stories.", "articles": [{"id": "2026-10-09-corporate-01", "section": "corporate", "category": "Earnings", "front_page_rank": 1, "headline": "Saffron Motors posts record quarterly deliveries on SUV demand", "dek": "Demo: utility vehicles make up 68% of volumes; EV share reaches 9%.", "summary": "Saffron Motors, a fictional carmaker, reports a 14% rise in quarterly deliveries, driven by sport-utility vehicles.", "body": ["The company said waiting periods for its top-selling models had fallen to four weeks.", "Electric vehicles accounted for 9% of sales, up from 5% a year earlier."], "why_it_matters": "Product mix matters as much as volume: SUVs carry higher margins than small cars.", "implications": [{"label": "For investors", "text": "A richer mix supports margins even as discounts rise."}], "author": "Demo Desk", "published_at": "2026-10-09T06:10:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-09/corporate-01", "published_at": "2026-10-09T06:10:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["autos", "EV"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-09-india-02", "section": "india", "category": "Policy", "front_page_rank": 2, "headline": "Government widens production-linked incentives to specialty chemicals", "dek": "Illustrative: a ₹7,500 crore outlay over five years.", "summary": "In this fictional announcement, an incentive scheme is extended to specialty chemicals to reduce dependence on imported intermediates.", "body": ["Companies will receive incentives of 4–6% on incremental sales above a base year.", "Applications open next month."], "why_it_matters": "Incentive schemes shift the economics of new capacity and can change which companies win market share.", "implications": [{"label": "For chemical makers", "text": "Incentives improve project returns on new capacity."}], "author": "Demo Desk", "published_at": "2026-10-09T06:20:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-09/india-02", "published_at": "2026-10-09T06:20:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["PLI", "chemicals"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}, {"id": "2026-10-09-markets-03", "section": "markets", "category": "Equities", "front_page_rank": 3, "headline": "Asian equities edge higher ahead of US inflation data", "dek": "Demo session: trading volumes stay thin.", "summary": "Regional indices post modest gains in this fictional session as investors wait for US inflation figures.", "body": ["Technology stocks led gains. Volumes were about 20% below the monthly average."], "why_it_matters": "Major US data releases set the tone for global risk appetite.", "implications": [{"label": "For traders", "text": "Low volumes can exaggerate moves after the data."}], "author": "Demo Desk", "published_at": "2026-10-09T06:30:00+05:30", "updated_at": null, "source": {"name": "Demonstration Source (fictional)", "url": "https://example.com/demo/2026-10-09/markets-03", "published_at": "2026-10-09T06:30:00+05:30", "type": "demo"}, "verification": {"status": "demo", "checked_by": null, "checked_at": null, "notes": "Fictional demonstration story. Companies, figures and events are invented to show the layout."}, "tags": ["equities", "Asia"], "is_demo": true, "pipeline": {"feed_id": null, "ingested_at": null, "summarised_by": null, "summary_model": null}}], "watchlist": []}};
+</script>
+<script>
+/* The Daily Brief — reusable view components.
+ * Every component is a pure function: data in, HTML string out.
+ * All text from the data files is escaped, so pipeline content can never inject markup.
+ */
+(function (global) {
+  "use strict";
+
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const safeUrl = (u) => (/^https?:\/\//i.test(String(u || "")) ? esc(u) : "#");
+
+  // Link to the source when it has a real web address; plain text otherwise.
+  const SourceLink = (src) => (src && /^https?:\/\//i.test(String(src.url || ""))
+    ? `<a href="${esc(src.url)}" target="_blank" rel="noopener noreferrer">${esc(src.name || "Source")}</a>`
+    : esc(src?.name || "No external source"));
+
+  let ctx = { site: null, tz: "Asia/Kolkata", locale: "en-IN" };
+  function configure(site) {
+    ctx = { site, tz: site.timezone || "Asia/Kolkata", locale: site.locale || "en-IN", tzLabel: site.timezone_label || "" };
+  }
+
+  function fmtDate(iso, opts) {
+    if (!iso) return "";
+    const d = new Date(iso.length === 10 ? iso + "T12:00:00+05:30" : iso);
+    return new Intl.DateTimeFormat(ctx.locale, { timeZone: ctx.tz, ...opts }).format(d);
+  }
+  const fmtLong = (iso) => fmtDate(iso, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const fmtShort = (iso) => fmtDate(iso, { day: "numeric", month: "short", year: "numeric" });
+  const fmtTime = (iso) => fmtDate(iso, { hour: "2-digit", minute: "2-digit", hour12: false }) + (ctx.tzLabel ? " " + ctx.tzLabel : "");
+  const fmtStamp = (iso) => `${fmtShort(iso)}, ${fmtTime(iso)}`;
+
+  const sectionOf = (slug) => (ctx.site?.sections || []).find((s) => s.slug === slug) || { slug, name: slug, short: slug };
+  const articleHref = (date, id) => `#/edition/${date}/article/${encodeURIComponent(id)}`;
+  const sectionHref = (date, slug) => `#/edition/${date}/section/${slug}`;
+
+  function Badge(verification) {
+    const status = verification?.status || "unverified";
+    const meta = ctx.site?.verification_statuses?.[status] || { label: status, description: "" };
+    return `<span class="badge badge--${esc(status)}" title="${esc(meta.description)}">${esc(meta.label)}</span>`;
+  }
+
+  function Figures(list) {
+    if (!list?.length) return "";
+    return `<dl class="figures">${list.map((f) =>
+      `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join("")}</dl>`;
+  }
+
+  /**
+   * ArticleCard — the one card used everywhere.
+   * variant: "lead" | "rail" | "standard" | "compact" | "analysis" | "result"
+   */
+  function ArticleCard(a, { date, variant = "standard", rank, highlight, opening = false } = {}) {
+    const href = articleHref(date || a.published_at.slice(0, 10), a.id);
+    const hl = (s) => (highlight ? highlightText(s, highlight) : esc(s));
+    const showWhy = variant !== "compact" && variant !== "result";
+    const showSource = variant !== "compact";
+    return `
+<article class="card card--${variant}">
+  ${variant === "rail" && rank ? `<span class="rank" aria-label="Rank ${rank}">${rank}</span>` : ""}
+  <div class="card__meta">
+    <a class="card__kicker" href="${sectionHref(date, a.section)}">${esc(a.category || sectionOf(a.section).short)}</a>
+    ${Badge(a.verification)}
+  </div>
+  <h3 class="card__headline"><a href="${href}">${hl(a.headline)}</a></h3>
+  ${variant === "lead" && a.dek ? `<p class="card__dek">${esc(a.dek)}</p>` : ""}
+  ${variant === "analysis" ? `<p class="card__byline">${esc(a.author || "")}</p>` : ""}
+  <p class="card__summary">${hl(a.summary)}</p>
+  ${variant === "lead" ? Figures(a.key_figures) : ""}
+  ${opening ? (a.body || []).filter((b) => typeof b === "string").slice(1, 3).map((p) => `<p class="card__opening">${esc(p)}</p>`).join("") + `<a class="card__more" href="${href}">Continue reading →</a>` : ""}
+  ${showWhy && a.why_it_matters ? `<p class="card__why"><b>Why it matters</b>${esc(a.why_it_matters)}</p>` : ""}
+  <div class="card__foot">
+    <time datetime="${esc(a.published_at)}">${esc(fmtStamp(a.published_at))}</time>
+    ${showSource && a.source ? `<span>Source: ${SourceLink(a.source)}</span>` : ""}
+    ${variant === "result" ? `<span>${esc(sectionOf(a.section).name)}</span>` : ""}
+  </div>
+</article>`;
+  }
+
+  function highlightText(text, q) {
+    const safe = esc(text);
+    const terms = q.trim().split(/\s+/).filter((t) => t.length > 1).map((t) => esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    if (!terms.length) return safe;
+    return safe.replace(new RegExp(`(${terms.join("|")})`, "gi"), "<mark>$1</mark>");
+  }
+
+  function Body(blocks) {
+    return (blocks || []).map((b) => {
+      if (typeof b === "string") return `<p>${esc(b)}</p>`;
+      switch (b.type) {
+        case "h2": return `<h2>${esc(b.text)}</h2>`;
+        case "quote": return `<blockquote>${esc(b.text)}${b.cite ? `<cite>${esc(b.cite)}</cite>` : ""}</blockquote>`;
+        case "list": return `<ul>${(b.items || []).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+        default: return `<p>${esc(b.text)}</p>`;
+      }
+    }).join("");
+  }
+
+  function Implications(list) {
+    if (!list?.length) return "";
+    return `<dl class="implications">${list.map((i) =>
+      typeof i === "string" ? `<div><dt>—</dt><dd>${esc(i)}</dd></div>`
+        : `<div><dt>${esc(i.label)}</dt><dd>${esc(i.text)}</dd></div>`).join("")}</dl>`;
+  }
+
+  function SourceBox(a) {
+    const v = a.verification || {};
+    const src = a.source || {};
+    return `
+<aside class="sourcebox" aria-label="Source and verification">
+  <h2>Source &amp; verification</h2>
+  <dl>
+    <dt>Original source</dt><dd>${SourceLink(src)}</dd>
+    <dt>Source published</dt><dd>${src.published_at ? esc(fmtStamp(src.published_at)) : "Not recorded"}</dd>
+    <dt>Status</dt><dd>${Badge(v)}${v.checked_at ? ` · checked ${esc(fmtStamp(v.checked_at))}` : ""}${v.checked_by ? ` by ${esc(v.checked_by)}` : ""}</dd>
+    ${v.notes ? `<dt>Notes</dt><dd>${esc(v.notes)}</dd>` : ""}
+  </dl>
+</aside>`;
+  }
+
+  function Watchlist(items) {
+    if (!items?.length) return `<p class="empty">No scheduled events for tomorrow in this edition.</p>`;
+    const order = { high: 0, medium: 1, low: 2 };
+    const sorted = [...items].sort((x, y) => (order[x.importance] ?? 3) - (order[y.importance] ?? 3) || String(x.time).localeCompare(String(y.time)));
+    return `
+<div class="table-scroll">
+<table class="watch">
+  <thead><tr><th scope="col">Time (${esc(ctx.tzLabel || ctx.tz)})</th><th scope="col">Event</th><th scope="col">Type</th><th scope="col">Region</th><th scope="col">Importance</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  ${sorted.map((w) => `
+    <tr>
+      <td class="time">${esc(w.time || "TBC")}<div class="w-desc">${esc(fmtDate(w.date, { day: "numeric", month: "short" }))}</div></td>
+      <td><div class="w-title">${w.source?.url ? `<a href="${safeUrl(w.source.url)}" target="_blank" rel="noopener noreferrer">${esc(w.title)}</a>` : esc(w.title)}</div>
+          ${w.description ? `<div class="w-desc">${esc(w.description)}</div>` : ""}</td>
+      <td>${esc(w.category)}</td>
+      <td>${esc(w.region)}</td>
+      <td><span class="imp" data-level="${esc(w.importance)}" aria-label="${esc(w.importance)} importance" title="${esc(w.importance)}"><i></i><i></i><i></i></span></td>
+      <td>${Badge(w.verification)}</td>
+    </tr>`).join("")}
+  </tbody>
+</table>
+</div>`;
+  }
+
+  global.DB = Object.assign(global.DB || {}, {
+    components: { ArticleCard, Badge, Body, Implications, SourceBox, Watchlist, Figures },
+    util: { SourceLink, esc, safeUrl, fmtDate, fmtLong, fmtShort, fmtTime, fmtStamp, sectionOf, articleHref, sectionHref, highlightText, configure },
+  });
+})(window);
+
+/* The Daily Brief — data loading, routing and page views.
+ *
+ * Data flow:  data/site.json  →  data/editions.json (manifest)  →  data/editions/<date>.json
+ * Routes (hash-based, so the site runs on any static host):
+ *   #/                                 latest published edition
+ *   #/edition/2026-10-11               a specific edition
+ *   #/edition/<date>/section/<slug>    every story in one section
+ *   #/edition/<date>/article/<id>      article page
+ *   #/archive                          previous editions
+ *   #/search/<query>                   search across all published editions
+ */
+(function () {
+  "use strict";
+  const { ArticleCard, Body, Implications, SourceBox, Watchlist } = DB.components;
+  const U = DB.util;
+  const esc = U.esc;
+  const DATA_ROOT = "data";
+
+  /* ---------------- Data store ---------------- */
+  // If a build step embedded the data (window.DAILY_BRIEF_BUNDLE), use it; otherwise fetch the JSON files.
+  const bundle = window.DAILY_BRIEF_BUNDLE || null;
+  const cache = new Map();
+  async function getJSON(path) {
+    if (cache.has(path)) return cache.get(path);
+    const p = bundle
+      ? Promise.resolve(bundle[path] ?? Promise.reject(new Error(`Missing ${path} in bundle`)))
+      : fetch(`${DATA_ROOT}/${path}`, { cache: "no-cache" }).then((r) => {
+          if (!r.ok) throw new Error(`${path}: HTTP ${r.status}`);
+          return r.json();
+        });
+    cache.set(path, p);
+    return p;
+  }
+
+  // Scheduled publishing: an edition is visible once status is "published",
+  // or status is "scheduled" and its publish time has passed. Drafts never show.
+  const isLive = (e, now = Date.now()) =>
+    (e.status === "published" || e.status === "scheduled") && Date.parse(e.published_at) <= now;
+
+  const Store = {
+    site: () => getJSON("site.json"),
+    async editions() {
+      const m = await getJSON("editions.json");
+      return m.editions.filter((e) => isLive(e)).sort((a, b) => b.date.localeCompare(a.date));
+    },
+    async edition(date) {
+      const list = await this.editions();
+      const entry = date ? list.find((e) => e.date === date) : list[0];
+      if (!entry) return null;
+      const ed = await getJSON(entry.path);
+      return { ...ed, _entry: entry };
+    },
+  };
+
+  /* ---------------- Shell ---------------- */
+  const $ = (sel) => document.querySelector(sel);
+  let SITE = null;
+  let currentEdition = null;
+
+  function renderMasthead(ed, activeSlug) {
+    const total = ed?.articles?.length || 0;
+    const counts = {};
+    (ed?.articles || []).forEach((a) => { const s = a.verification?.status || "unverified"; counts[s] = (counts[s] || 0) + 1; });
+    const ledger = Object.entries(counts).map(([s, n]) => `${n} ${(SITE.verification_statuses[s]?.label || s).toLowerCase()}`).join(" · ");
+    $("#masthead").innerHTML = `
+<div class="wrap">
+  <div class="dateline label">
+    <span>${ed ? esc(U.fmtLong(ed.date)) : ""}</span>
+    <span class="mono">${esc(SITE.volume)} · No. ${ed ? esc(ed.edition_number) : "—"}</span>
+    <span>${total} stories${ledger ? ` · ${esc(ledger)}` : ""}</span>
+  </div>
+  <div class="nameplate">
+    <a href="#/"><h1>The Daily <em>Brief</em></h1></a>
+    <p class="tagline">${esc(SITE.tagline)}</p>
+  </div>
+  <div class="navbar">
+    <nav class="sections-nav" aria-label="Sections">
+      <a href="#/" ${!activeSlug ? 'aria-current="page"' : ""}>Front page</a>
+      ${SITE.sections.map((s) => `<a href="${U.sectionHref(ed?.date, s.slug)}" ${activeSlug === s.slug ? 'aria-current="page"' : ""}>${esc(s.short)}</a>`).join("")}
+      <a href="#/archive" ${activeSlug === "archive" ? 'aria-current="page"' : ""}>Archive</a>
+    </nav>
+    <form class="search" role="search" id="search-form">
+      <label for="q" class="skip">Search stories</label>
+      <input id="q" name="q" type="search" placeholder="Search stories" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme">Theme</button>
+  </div>
+  ${ed?.is_demo ? `<div class="notice" role="note"><strong>Demonstration edition</strong><span>${esc(ed.editor_note || "Stories in this edition are fictional and exist only to demonstrate the layout.")}</span></div>` : ""}
+</div>`;
+    $("#search-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = $("#q").value.trim();
+      if (q) location.hash = `#/search/${encodeURIComponent(q)}`;
+    });
+    $("#theme-toggle").addEventListener("click", toggleTheme);
+  }
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("db-theme", root.dataset.theme); } catch (_) {}
+  }
+  try { const t = localStorage.getItem("db-theme"); if (t) document.documentElement.dataset.theme = t; } catch (_) {}
+
+  function renderFooter() {
+    $("#footer").innerHTML = `
+<div class="wrap footer">
+  <strong>The Daily Brief</strong>
+  <p>A personal digest of finance, markets and policy. Every story links to its original source and carries a verification status. Summaries are not investment advice.</p>
+  <nav><a href="#/">Today</a> · <a href="#/archive">Previous editions</a></nav>
+</div>`;
+  }
+
+  const main = () => $("#main");
+  const setTitle = (t) => { document.title = t ? `${t} — The Daily Brief` : "The Daily Brief"; };
+
+  /* ---------------- Views ---------------- */
+  function bySection(ed, slug, excludeFront = true) {
+    return ed.articles
+      .filter((a) => a.section === slug && (!excludeFront || !a.front_page_rank))
+      .sort((a, b) => b.published_at.localeCompare(a.published_at));
+  }
+
+  function viewHome(ed) {
+    const d = ed.date;
+    const front = ed.articles.filter((a) => a.front_page_rank).sort((a, b) => a.front_page_rank - b.front_page_rank).slice(0, 5);
+    const out = [];
+    for (const block of SITE.homepage) {
+      if (block.type === "front" && front.length) {
+        const [lead, ...rail] = front;
+        out.push(`
+<section class="band" aria-labelledby="h-front">
+  <div class="band__head"><div class="band__title"><h2 id="h-front">${esc(block.title)}</h2><p>The ${front.length} stories that matter most this morning.</p></div></div>
+  <div class="front">
+    <div class="front__lead">${ArticleCard(lead, { date: d, variant: "lead", opening: true })}</div>
+    <div class="front__rail">${rail.map((a, i) => ArticleCard(a, { date: d, variant: "rail", rank: i + 2 })).join("")}</div>
+  </div>
+</section>`);
+      } else if (block.type === "section") {
+        const s = U.sectionOf(block.slug);
+        const items = bySection(ed, block.slug).slice(0, 3);
+        if (!items.length) continue;
+        out.push(`
+<section class="band" aria-labelledby="h-${s.slug}">
+  <div class="band__head">
+    <div class="band__title"><h2 id="h-${s.slug}">${esc(s.name)}</h2><p>${esc(s.description)}</p></div>
+    <a class="more" href="${U.sectionHref(d, s.slug)}">All ${esc(s.short)} stories →</a>
+  </div>
+  <div class="grid3" style="--cols:${Math.min(items.length, 3)}">${items.map((a) => ArticleCard(a, { date: d })).join("")}</div>
+</section>`);
+      } else if (block.type === "analysis") {
+        const s = U.sectionOf(block.slug);
+        const items = bySection(ed, block.slug, false);
+        if (!items.length) continue;
+        out.push(`
+<section class="band corner" aria-labelledby="h-analysis">
+  <div class="band__head"><div class="band__title"><h2 id="h-analysis">${esc(s.name)}</h2><p>${esc(s.description)}</p></div></div>
+  <div class="grid2">${items.slice(0, 2).map((a) => ArticleCard(a, { date: d, variant: "analysis" })).join("")}</div>
+</section>`);
+      } else if (block.type === "learn") {
+        const s = U.sectionOf(block.slug);
+        const a = bySection(ed, block.slug, false)[0];
+        if (!a) continue;
+        out.push(`
+<section class="band" aria-labelledby="h-learn">
+  <div class="band__head"><div class="band__title"><h2 id="h-learn">${esc(s.name)}</h2><p>${esc(s.description)}</p></div></div>
+  <div class="learn">
+    ${ArticleCard(a, { date: d, variant: "lead" })}
+    ${a.key_takeaways?.length ? `<aside class="takeaways"><h3>Key takeaways</h3><ol>${a.key_takeaways.map((t) => `<li>${esc(t)}</li>`).join("")}</ol></aside>` : ""}
+  </div>
+</section>`);
+      } else if (block.type === "watchlist") {
+        const nextDay = ed.watchlist?.[0]?.date;
+        out.push(`
+<section class="band" aria-labelledby="h-watch">
+  <div class="band__head"><div class="band__title"><h2 id="h-watch">${esc(block.title)}</h2><p>${nextDay ? `Scheduled for ${esc(U.fmtLong(nextDay))}. Times are ${esc(SITE.timezone_label)}.` : "Economic releases, results and events to watch."}</p></div></div>
+  ${Watchlist(ed.watchlist)}
+</section>`);
+      }
+    }
+    main().innerHTML = `<div class="wrap">${out.join("")}</div>`;
+    setTitle(ed === currentEdition ? "" : `Edition No. ${ed.edition_number}`);
+  }
+
+  function viewSection(ed, slug) {
+    const s = U.sectionOf(slug);
+    const items = bySection(ed, slug, false);
+    main().innerHTML = `
+<div class="wrap">
+  <header class="page-head"><span class="label">${esc(U.fmtLong(ed.date))} · No. ${esc(ed.edition_number)}</span><h1>${esc(s.name)}</h1><p>${esc(s.description || "")}</p></header>
+  <div class="results">${items.length ? items.map((a) => ArticleCard(a, { date: ed.date })).join("") : `<p class="empty">No ${esc(s.short)} stories in this edition.</p>`}</div>
+</div>`;
+    setTitle(s.name);
+  }
+
+  function viewArticle(ed, id) {
+    const a = ed.articles.find((x) => x.id === id);
+    if (!a) return viewNotFound("We couldn't find that story in this edition.");
+    const s = U.sectionOf(a.section);
+    const related = ed.articles.filter((x) => x.section === a.section && x.id !== a.id).slice(0, 3);
+    const canPrint = window.self === window.top; // printing is blocked inside embedded previews
+    main().innerHTML = `
+<div class="wrap">
+<article class="article">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#/edition/${ed.date}">No. ${esc(ed.edition_number)} · ${esc(U.fmtShort(ed.date))}</a><span>/</span><a href="${U.sectionHref(ed.date, a.section)}">${esc(s.name)}</a></nav>
+  ${a.is_demo ? `<div class="notice" role="note"><strong>Demo story</strong><span>This article is fictional. ${esc(a.verification?.notes || "")}</span></div>` : ""}
+  <header class="article__head">
+    <div class="card__meta"><span class="card__kicker">${esc(a.category)}</span>${DB.components.Badge(a.verification)}</div>
+    <h1>${esc(a.headline)}</h1>
+    ${a.dek ? `<p class="article__dek">${esc(a.dek)}</p>` : ""}
+    <div class="article__meta">
+      ${a.author ? `<span>By ${esc(a.author)}</span>` : ""}
+      <time datetime="${esc(a.published_at)}">Published ${esc(U.fmtStamp(a.published_at))}</time>
+      ${a.updated_at ? `<time datetime="${esc(a.updated_at)}">Updated ${esc(U.fmtStamp(a.updated_at))}</time>` : ""}
+      <span>Source: ${U.SourceLink(a.source)}</span>
+    </div>
+  </header>
+  <p class="article__summary">${esc(a.summary)}</p>
+  ${a.key_figures?.length ? `<div style="margin-top:20px">${DB.components.Figures(a.key_figures)}</div>` : ""}
+  <div class="prose">${Body(a.body)}</div>
+  ${a.key_takeaways?.length ? `<aside class="takeaways"><h3>Key takeaways</h3><ol>${a.key_takeaways.map((t) => `<li>${esc(t)}</li>`).join("")}</ol></aside>` : ""}
+  <section class="callout" style="margin-top:24px"><h2>Why it matters</h2><p>${esc(a.why_it_matters)}</p></section>
+  ${a.implications?.length ? `<section class="callout" style="margin-top:24px"><h2>Business &amp; financial implications</h2>${Implications(a.implications)}</section>` : ""}
+  ${SourceBox(a)}
+  ${a.tags?.length ? `<div class="tags">${a.tags.map((t) => `<a href="#/search/${encodeURIComponent(t)}">${esc(t)}</a>`).join("")}</div>` : ""}
+  <div class="actions">
+    ${canPrint ? `<button class="btn" type="button" id="print-btn">Print article</button>` : ""}
+    <button class="btn" type="button" id="copy-btn">Copy link</button>
+    ${/^https?:\/\//i.test(a.source?.url || "") ? `<a class="btn" href="${esc(a.source.url)}" target="_blank" rel="noopener noreferrer">Read original source</a>` : ""}
+  </div>
+  ${related.length ? `<section class="related band"><div class="band__head"><h2>More from ${esc(s.name)}</h2></div><div class="grid3" style="--cols:${related.length}">${related.map((r) => ArticleCard(r, { date: ed.date, variant: "compact" })).join("")}</div></section>` : ""}
+</article>
+</div>`;
+    $("#print-btn")?.addEventListener("click", () => window.print());
+    $("#copy-btn").addEventListener("click", (e) => {
+      const btn = e.currentTarget;
+      navigator.clipboard?.writeText(location.href).then(() => { btn.textContent = "Link copied"; }, () => { btn.textContent = "Copy failed"; });
+    });
+    setTitle(a.headline);
+  }
+
+  async function viewArchive() {
+    const list = await Store.editions();
+    const groups = {};
+    list.forEach((e) => { const k = U.fmtDate(e.date, { month: "long", year: "numeric" }); (groups[k] ||= []).push(e); });
+    main().innerHTML = `
+<div class="wrap">
+  <header class="page-head"><span class="label">Archive</span><h1>Previous editions</h1><p>${list.length} published editions. Scheduled and draft editions appear here once their publish time passes.</p></header>
+  ${Object.entries(groups).map(([month, eds]) => `
+  <section class="archive-month"><h2>${esc(month)}</h2>
+    ${eds.map((e) => `
+    <a class="archive-row" href="#/edition/${e.date}">
+      <span class="no">No. ${esc(e.edition_number)}</span>
+      <div><h3>${esc(e.lead_headline || "Edition")}</h3><div class="sub">${esc(U.fmtLong(e.date))} · ${e.article_count} stories</div></div>
+      <span>${e.is_demo ? DB.components.Badge({ status: "demo" }) : ""}</span>
+    </a>`).join("")}
+  </section>`).join("")}
+</div>`;
+    setTitle("Previous editions");
+  }
+
+  async function viewSearch(q, sectionFilter = "") {
+    const list = await Store.editions();
+    const eds = await Promise.all(list.map((e) => Store.edition(e.date)));
+    const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = [];
+    eds.forEach((ed) => ed.articles.forEach((a) => {
+      if (sectionFilter && a.section !== sectionFilter) return;
+      const hay = [a.headline, a.dek, a.summary, a.why_it_matters, a.category, (a.tags || []).join(" "), a.source?.name]
+        .join(" ").toLowerCase();
+      if (terms.every((t) => hay.includes(t))) hits.push({ a, date: ed.date });
+    }));
+    hits.sort((x, y) => y.a.published_at.localeCompare(x.a.published_at));
+    main().innerHTML = `
+<div class="wrap">
+  <header class="page-head"><span class="label">Search</span><h1>${esc(q)}</h1>
+    <div class="filters">
+      <label for="section-filter">Section</label>
+      <select id="section-filter"><option value="">All sections</option>${SITE.sections.map((s) => `<option value="${s.slug}" ${s.slug === sectionFilter ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <span>${hits.length} result${hits.length === 1 ? "" : "s"} across ${eds.length} editions</span>
+    </div>
+  </header>
+  <div class="results">${hits.length ? hits.map((h) => ArticleCard(h.a, { date: h.date, variant: "result", highlight: q })).join("") : `<p class="empty">No stories match “${esc(q)}”. Try a company name, a sector or a term like “IPO”.</p>`}</div>
+</div>`;
+    $("#section-filter").addEventListener("change", (e) => viewSearch(q, e.target.value));
+    $("#q").value = q;
+    setTitle(`Search: ${q}`);
+  }
+
+  function viewNotFound(msg) {
+    main().innerHTML = `<div class="wrap"><header class="page-head"><h1>Not found</h1><p>${esc(msg)}</p><p><a href="#/" style="color:var(--accent)">Go to today's front page →</a></p></header></div>`;
+    setTitle("Not found");
+  }
+
+  /* ---------------- Router ---------------- */
+  async function route() {
+    const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
+    try {
+      if (parts[0] === "archive") { renderMasthead(currentEdition, "archive"); await viewArchive(); }
+      else if (parts[0] === "search") { renderMasthead(currentEdition); await viewSearch(parts.slice(1).join("/")); }
+      else {
+        const date = parts[0] === "edition" ? parts[1] : null;
+        const ed = date ? await Store.edition(date) : currentEdition;
+        if (!ed) { renderMasthead(currentEdition); return viewNotFound(`There is no published edition for ${date}.`); }
+        if (parts[2] === "article") { renderMasthead(ed, ed.articles.find((a) => a.id === parts[3])?.section); viewArticle(ed, parts[3]); }
+        else if (parts[2] === "section") { renderMasthead(ed, parts[3]); viewSection(ed, parts[3]); }
+        else { renderMasthead(ed); viewHome(ed); }
+      }
+    } catch (err) {
+      console.error(err);
+      main().innerHTML = `<div class="wrap"><header class="page-head"><h1>Couldn't load this page</h1><p>${esc(err.message)}. If you opened index.html directly from disk, serve the folder instead: <code>python3 -m http.server</code>.</p></header></div>`;
+    }
+    window.scrollTo(0, 0);
+  }
+
+  async function start() {
+    try {
+      SITE = await Store.site();
+      U.configure(SITE);
+      currentEdition = await Store.edition(null);
+      renderFooter();
+      window.addEventListener("hashchange", route);
+      await route();
+    } catch (err) {
+      console.error(err);
+      main().innerHTML = `<div class="wrap"><header class="page-head"><h1>Couldn't load the newspaper</h1><p>${esc(err.message)}. Serve this folder over HTTP (for example <code>python3 -m http.server 8000</code>) rather than opening the file directly.</p></header></div>`;
+    }
+  }
+  start();
+})();
+
+</script>
+</body>
+</html>
